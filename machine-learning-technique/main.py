@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score
 from decision_tree import DecisionTree
 from sklearn.tree import DecisionTreeClassifier
 
