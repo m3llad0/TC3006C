@@ -79,6 +79,9 @@ class DecisionTree:
         -----------
         None
         """
+        if X.size == 0 or y.size == 0:
+            raise ValueError('The input cannot be empty.')
+        
         self.root = self.buildTree(X, y, depth=0)
     
     def buildTree(self, X, y, depth):
