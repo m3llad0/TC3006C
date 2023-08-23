@@ -199,7 +199,7 @@ class DecisionTree:
             return []
         
         predictions = [self.predictionTree(self.root, sample) for sample in X]
-        return predictions
+        return np.array(predictions)
 
     def predictionTree(self, node, sample):
         """
