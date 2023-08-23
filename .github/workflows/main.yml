@@ -1,0 +1,33 @@
+name: CI/CD for machine learning in Python
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        folder: [machine-learning-technique]  
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set Up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10.12
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ${{ matrix.folder }}/requirements.txt
+
+    - name: Run Tests
+      run: |
+        pytest ${{ matrix.folder }}/test.py
