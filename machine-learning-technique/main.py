@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from decision_tree import DecisionTree
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 
 
 
@@ -78,6 +79,10 @@ def main():
     print("Custom decision tree predictions: ", customPredictions)
     print("Sklearn decision tree predictions", sklearnPredictions)
 
+    # Calcular la exactitud del modelo custom comparada con el modelo de sklearn
+    customAccuracy = accuracy_score(sklearnPredictions, customPredictions)
+
+    print("Exactitud del modelo comparada con sklearn: " , customAccuracy)
 
 
 
