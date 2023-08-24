@@ -2,6 +2,33 @@
 
 Este proyecto contiene una implementación básica de un clasificador de árbol de decisiones en Python 3.10.12. Un árbol de decisiones es una estructura de modelo de aprendizaje automático que divide los datos en varias ramas basadas en las características de entrada, permitiendo la clasificación de nuevas muestras.
 
+## Ejecución
+
+Para ejecutar el archivo `main.py` y ver el clasificador de árbol de decisiones en acción, sigue estos pasos:
+
+1. Asegúrate de tener Python 3.10.12 instalado. Puedes verificar la versión de Python ejecutando el siguiente comando en tu terminal:
+
+```bash
+python --version
+```
+
+2. Clona este repositorio en tu máquina local o descárgalo como un archivo ZIP.
+
+3. Navega a la ubicación del archivo main.py en tu terminal.
+
+4. Instala las librerías necesarias:
+```bash
+pip -r install requirements.txt 
+```
+
+5. Ejecuta el archivo usando el siguiente comando:
+
+```bash
+python main.py
+```
+
+Esto ejecutará el script y mostrará ejemplos de cómo se entrena el clasificador y se hacen predicciones.
+
 ## Clase `Node`
 
 La clase `Node` representa un nodo en un árbol de decisiones y tiene los siguientes atributos:
