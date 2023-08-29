@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        folder: [machine-learning-technique]  
+        folder: [machine-learning-technique, flask-aws]  
 
     steps:
     - name: Checkout Repository
