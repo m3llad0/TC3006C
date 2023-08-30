@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from decision_tree import DecisionTree
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score, mean_squared_error
 
 
 
@@ -26,20 +26,6 @@ def trainingModel(trainingData: pd.DataFrame)->DecisionTree:
 
     return tree
 
-def trainingSklearnModel(trainingData: pd.DataFrame)->DecisionTreeClassifier:
-    #Codificar variables categoricas
-    encoder = LabelEncoder()
-    trainingData['Gender'] = encoder.fit_transform(trainingData['Gender'])
-
-    # Dividir los datos en caracterisiticas y etiquetas de entrenamiento
-    X_train = trainingData.drop('Index', axis=1).values
-    y_train = trainingData['Index'].values
-
-    tree = DecisionTreeClassifier(max_depth=100)
-    tree.fit(X_train, y_train)
-
-    return tree
-
 def predictionModel(predictData: pd.DataFrame, customTree: DecisionTree)->list:
     encoder = LabelEncoder()
 
@@ -48,43 +34,43 @@ def predictionModel(predictData: pd.DataFrame, customTree: DecisionTree)->list:
     
     return customTree.predict(predictData.values)
 
+def evaluate_metrics(true_labels, predicted_labels):
+    conf_matrix = confusion_matrix(true_labels, predicted_labels)
+    accuracy = accuracy_score(true_labels, predicted_labels)
+    precision = precision_score(true_labels, predicted_labels, average='weighted')
+    recall = recall_score(true_labels, predicted_labels, average='weighted')
+    f1 = f1_score(true_labels, predicted_labels, average='weighted')
+    
+    return accuracy, precision, recall, f1
 
-def predictonSklearn(predictData: pd.DataFrame, sklearnTree: DecisionTreeClassifier)->list:
-    encoder = LabelEncoder()
+def evaluate_mse(true_values, predicted_values):
+    mse = mean_squared_error(true_values, predicted_values)
 
-    #Codficar variables categoricas
-    predictData['Gender'] = encoder.fit_transform(predictData['Gender'])
-
-    return sklearnTree.predict(predictData.values)
-
+    return mse
 
 def main():
-    # Carga de datos
-    trainingData = pd.read_csv('bmi_train.csv')
-    predictData = pd.read_csv('bmi_validation.csv')
+    data = pd.read_csv('bmi_train.csv')
+
+    # Dividir el conjunto de datos en entrenamiento y prueba
+    trainingData, testData = train_test_split(data, test_size=0.2, random_state=42)
 
     #Entrenamiento de modelos
         # Entrenamiento de modelo custom
     customModel = trainingModel(trainingData)
-        # Entrenamiento de modelo sklearn
-    sklearnModel = trainingSklearnModel(trainingData)
 
-    #Generar predicciones
-        #Entrenamiento de modelo custom
-    customPredictions = predictionModel(predictData, customModel)
-        #Entrenamiento de modelo de sklearn
-    sklearnPredictions = predictonSklearn(predictData, sklearnModel)
+    customPredictions = predictionModel(testData, customModel)
 
+    print("Custom decision tree predictions:", customPredictions)
 
-    print("Custom decision tree predictions: ", customPredictions)
-    print("Sklearn decision tree predictions", sklearnPredictions)
-
-    # Calcular la exactitud del modelo custom comparada con el modelo de sklearn
-    customAccuracy = accuracy_score(sklearnPredictions, customPredictions)
-
-    print("Exactitud del modelo comparada con sklearn: " , customAccuracy)
-
-
+    accuracy, custom_precision, custom_recall, custom_f1 = evaluate_metrics(testData['Index'], customPredictions)
+    custom_mse = evaluate_mse(testData['Index'], customPredictions)  # Use a relevant column
+    
+    print("Metrics for Custom Decision Tree:")
+    print("Accuracy:", accuracy)
+    print("Precision:", custom_precision)
+    print("Recall:", custom_recall)
+    print("F1-score:", custom_f1)
+    print("Mean Squared Error:", custom_mse)
 
 if __name__ == "__main__":
     main()
