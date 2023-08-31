@@ -3,8 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from decision_tree import DecisionTree
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score, mean_squared_error
-
+from sklearn.metrics import classification_report, confusion_matrix, mean_squared_error
 
 
 """
@@ -31,22 +30,7 @@ def predictionModel(predictData: pd.DataFrame, customTree: DecisionTree)->list:
 
     # Codificar variables categoricas
     predictData['Gender'] = encoder.fit_transform(predictData['Gender'])
-    
-    return customTree.predict(predictData.values)
-
-def evaluate_metrics(true_labels, predicted_labels):
-    conf_matrix = confusion_matrix(true_labels, predicted_labels)
-    accuracy = accuracy_score(true_labels, predicted_labels)
-    precision = precision_score(true_labels, predicted_labels, average='weighted')
-    recall = recall_score(true_labels, predicted_labels, average='weighted')
-    f1 = f1_score(true_labels, predicted_labels, average='weighted')
-    
-    return accuracy, precision, recall, f1, conf_matrix
-
-def evaluate_mse(true_values, predicted_values):
-    mse = mean_squared_error(true_values, predicted_values)
-
-    return mse
+    return customTree.predict(predictData.drop('Index', axis=1).values)
 
 def main():
     data = pd.read_csv('bmi_train.csv')
@@ -57,21 +41,14 @@ def main():
     #Entrenamiento de modelos
         # Entrenamiento de modelo custom
     customModel = trainingModel(trainingData)
-
     customPredictions = predictionModel(testData, customModel)
 
-    print("Custom decision tree predictions:", customPredictions)
-
-    accuracy, custom_precision, custom_recall, custom_f1, confusion_matrix = evaluate_metrics(testData['Index'], customPredictions)
-    custom_mse = evaluate_mse(testData['Index'], customPredictions)  # Use a relevant column
+    print("Decision Tree predictions:", customPredictions)
     
-    print("Metrics for Custom Decision Tree:")
-    print("Accuracy:", accuracy)
-    print("Precision:", custom_precision)
-    print("Recall:", custom_recall)
-    print("F1-score:", custom_f1)
-    print("Mean Squared Error:", custom_mse)
-    print("Confusion Matrix", confusion_matrix)
+    print("Metrics for Decision Tree:")
+    print(classification_report(testData['Index'], customPredictions))
+    print("Mean Squared Error:", mean_squared_error(testData['Index'], customPredictions))
+    print("Confusion Matrix", "\n", confusion_matrix(testData['Index'], customPredictions))
 
 if __name__ == "__main__":
     main()
