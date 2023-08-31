@@ -41,7 +41,7 @@ def evaluate_metrics(true_labels, predicted_labels):
     recall = recall_score(true_labels, predicted_labels, average='weighted')
     f1 = f1_score(true_labels, predicted_labels, average='weighted')
     
-    return accuracy, precision, recall, f1
+    return accuracy, precision, recall, f1, conf_matrix
 
 def evaluate_mse(true_values, predicted_values):
     mse = mean_squared_error(true_values, predicted_values)
@@ -62,7 +62,7 @@ def main():
 
     print("Custom decision tree predictions:", customPredictions)
 
-    accuracy, custom_precision, custom_recall, custom_f1 = evaluate_metrics(testData['Index'], customPredictions)
+    accuracy, custom_precision, custom_recall, custom_f1, confusion_matrix = evaluate_metrics(testData['Index'], customPredictions)
     custom_mse = evaluate_mse(testData['Index'], customPredictions)  # Use a relevant column
     
     print("Metrics for Custom Decision Tree:")
@@ -71,6 +71,7 @@ def main():
     print("Recall:", custom_recall)
     print("F1-score:", custom_f1)
     print("Mean Squared Error:", custom_mse)
+    print("Confusion Matrix", confusion_matrix)
 
 if __name__ == "__main__":
     main()
