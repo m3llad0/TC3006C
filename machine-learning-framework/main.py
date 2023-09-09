@@ -1,4 +1,5 @@
 from linear_regression import LinearRegressionModel
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -36,6 +37,17 @@ def main():
     print("Mean Squared Error (MSE):", evaluation_result['Mean Squared Error'])
     print("R-squared (R^2):", evaluation_result['R-squared (R^2)'])
     print("Mean Absolute Error (MAE):", evaluation_result['Mean Absolute Error (MAE)'])
+
+    # Crear una gráfica de regresion lineal
+    plt.figure(figsize=(8, 6))
+    plt.scatter(y_test, y_pred, alpha=0.5, label='Datos')
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2, label='Línea de Regresión')
+    plt.title('Gráfica de Regresión Lineal con Línea de Regresión')
+    plt.xlabel('Valores Reales')
+    plt.ylabel('Predicciones')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 if __name__ == "__main__":
     main()
